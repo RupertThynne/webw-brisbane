@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebW — Brisbane Web Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+
+/* ── RESET ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;
+  background:#fff;color:#0a0a0a;
+  font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── TOKENS ── */
+:root{
+  --bk:#0a0a0a;
+  --wh:#ffffff;
+  --g1:#f7f7f7;
+  --g2:#efefef;
+  --g3:#d4d4d4;
+  --g4:#9a9a9a;
+  --g5:#5a5a5a;
+  --g6:#2a2a2a;
+  --r:12px;
+  --pill:100px;
+}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  height:64px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--g2);
+  transition:box-shadow .3s;
+}
+nav.scrolled{box-shadow:0 2px 20px rgba(0,0,0,.06)}
+.nav-logo{
+  font-family:'Fredoka One',cursive;
+  font-size:28px;letter-spacing:-1px;
+  color:var(--bk);cursor:pointer;user-select:none;line-height:1;
+}
+.nav-right{display:flex;align-items:center;gap:4px}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none}
+.nav-item{position:relative}
+.nav-item>a{
+  display:flex;align-items:center;gap:4px;
+  font-size:13px;font-weight:500;color:var(--g5);
+  text-decoration:none;cursor:pointer;
+  padding:7px 13px;border-radius:8px;
+  transition:color .2s,background .2s;white-space:nowrap;
+}
+.nav-item>a:hover{color:var(--bk);background:var(--g1)}
+.chev{font-size:10px;transition:transform .2s;display:inline-block}
+.nav-item:hover>a .chev{transform:rotate(180deg)}
+
+/* Dropdown */
+.nav-dropdown{
+  position:absolute;top:calc(100% + 6px);left:0;
+  background:var(--wh);border:1px solid var(--g2);
+  border-radius:14px;padding:6px;min-width:210px;
+  box-shadow:0 16px 48px rgba(0,0,0,.1);
+  opacity:0;visibility:hidden;
+  transform:translateY(-6px);
+  transition:opacity .2s,transform .2s,visibility .2s;z-index:600;
+}
+.nav-item:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
+.dd-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--g4);padding:7px 14px 3px;display:block}
+.dd-item{display:block;padding:9px 14px;border-radius:8px;font-size:13px;font-weight:500;color:var(--g6);text-decoration:none;cursor:pointer;transition:background .15s,color .15s}
+.dd-item:hover{background:var(--g1);color:var(--bk)}
+.nav-cta{
+  background:var(--bk);color:var(--wh);
+  padding:9px 20px;border-radius:var(--pill);
+  font-size:13px;font-weight:700;border:none;cursor:pointer;
+  text-decoration:none;transition:opacity .2s,transform .15s;margin-left:6px;
+}
+.nav-cta:hover{opacity:.82;transform:translateY(-1px)}
+
+/* ── PAGES ── */
+.page{display:none;padding-top:64px}
+.page.active{display:block}
+
+/* ── HERO ── */
+.hero{
+  position:relative;min-height:calc(100vh - 64px);
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:72px 40px;
+  background:var(--bk);overflow:hidden;
+}
+.blob{position:absolute;border-radius:50%;filter:blur(100px);opacity:.14;pointer-events:none}
+.b1{width:700px;height:700px;background:radial-gradient(circle,#fff,transparent 70%);top:-160px;left:-200px;animation:bf1 16s ease-in-out infinite}
+.b2{width:500px;height:500px;background:radial-gradient(circle,#aaa,transparent 70%);bottom:-100px;right:-120px;animation:bf2 20s ease-in-out infinite}
+.b3{width:380px;height:380px;background:radial-gradient(circle,#ddd,transparent 70%);top:45%;left:58%;animation:bf3 13s ease-in-out infinite}
+@keyframes bf1{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(90px,50px) scale(1.07)}66%{transform:translate(-50px,90px) scale(.94)}}
+@keyframes bf2{0%,100%{transform:translate(0,0)}42%{transform:translate(-80px,-60px) scale(1.1)}72%{transform:translate(50px,30px) scale(.92)}}
+@keyframes bf3{0%,100%{transform:translate(0,0)}50%{transform:translate(-70px,60px) scale(1.12)}}
+.hero-grid{
+  position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,.1) 1px,transparent 1px);
+  background-size:38px 38px;pointer-events:none;
+  animation:gd 22s linear infinite;
+}
+@keyframes gd{from{background-position:0 0}to{background-position:38px 38px}}
+
+.hero-inner{position:relative;z-index:1;max-width:860px}
+.hero h1{
+  font-size:clamp(48px,7.5vw,92px);
+  font-weight:900;letter-spacing:-4px;line-height:1.0;
+  color:var(--wh);margin-bottom:22px;
+}
+.hero h1 em{font-style:normal;color:rgba(255,255,255,.38)}
+.hero-sub{
+  font-size:16px;color:rgba(255,255,255,.45);
+  max-width:480px;margin:0 auto 44px;line-height:1.65;
+}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+.btn-wh{background:var(--wh);color:var(--bk);padding:14px 32px;border-radius:var(--pill);font-size:14px;font-weight:700;border:none;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity .2s,transform .15s}
+.btn-wh:hover{opacity:.88;transform:translateY(-2px)}
+.btn-gh{background:transparent;color:rgba(255,255,255,.65);padding:14px 32px;border-radius:var(--pill);font-size:14px;font-weight:600;border:1px solid rgba(255,255,255,.18);cursor:pointer;text-decoration:none;display:inline-block;transition:border-color .2s,color .2s,transform .15s}
+.btn-gh:hover{border-color:rgba(255,255,255,.45);color:var(--wh);transform:translateY(-2px)}
+
+.hero-scroll{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  z-index:1;display:flex;flex-direction:column;align-items:center;gap:6px;
+  font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.25);
+}
+.scroll-bar{width:1px;height:44px;background:linear-gradient(to bottom,rgba(255,255,255,.25),transparent);animation:sa 2s ease-in-out infinite}
+@keyframes sa{0%{opacity:0;transform:scaleY(0);transform-origin:top}40%{opacity:1;transform:scaleY(1);transform-origin:top}80%{opacity:0;transform:scaleY(1);transform-origin:bottom}100%{opacity:0}}
+
+/* ── MARQUEE ── */
+.mq-wrap{border-top:1px solid var(--g2);border-bottom:1px solid var(--g2);background:var(--g1);overflow:hidden;padding:13px 0}
+.mq-track{display:flex;width:max-content;animation:mq 30s linear infinite}
+.mq-track span{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--g4);padding:0 24px;white-space:nowrap}
+.mq-track .s{color:var(--g3);padding:0}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ── SECTION UTILS ── */
+.sec{padding:80px 48px}
+.sin{max-width:1120px;margin:0 auto}
+.stag{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--g4);margin-bottom:14px;display:inline-block}
+.sh2{font-size:clamp(30px,4vw,52px);font-weight:900;letter-spacing:-2px;color:var(--bk);line-height:1.05;margin-bottom:14px}
+.slead{font-size:15px;color:var(--g5);max-width:500px;line-height:1.65}
+
+/* ── SERVICES — B&W grid ── */
+.svc-intro{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:32px;margin-bottom:56px;align-items:end;
+}
+.svc-intro-right{font-size:13px;color:var(--g4);line-height:1.7;text-align:right}
+
+.svc-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:0;border:1px solid var(--g2);border-radius:16px;overflow:hidden;
+}
+.svc-card{
+  padding:36px 30px;
+  border-right:1px solid var(--g2);
+  display:flex;flex-direction:column;
+  transition:background .2s;cursor:default;
+  position:relative;overflow:hidden;
+}
+.svc-card:last-child{border-right:none}
+.svc-card.dark{background:var(--bk)}
+.svc-card.dark:hover{background:#111}
+.svc-card.light{background:var(--wh)}
+.svc-card.light:hover{background:var(--g1)}
+.svc-card.mid{background:#1c1c1c}
+.svc-card.mid:hover{background:#222}
+.svc-card.pale{background:var(--g1)}
+.svc-card.pale:hover{background:var(--g2)}
+
+/* Hover accent bar */
+.svc-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--wh);transform:scaleX(0);transform-origin:left;
+  transition:transform .3s;
+}
+.svc-card.dark::before,.svc-card.mid::before{background:var(--wh)}
+.svc-card.light::before,.svc-card.pale::before{background:var(--bk)}
+.svc-card:hover::before{transform:scaleX(1)}
+
+.sc-num{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--g4);margin-bottom:32px}
+.svc-card.dark .sc-num,.svc-card.mid .sc-num{color:rgba(255,255,255,.25)}
+.sc-title{font-size:18px;font-weight:800;letter-spacing:-.4px;margin-bottom:12px}
+.svc-card.dark .sc-title,.svc-card.mid .sc-title{color:var(--wh)}
+.svc-card.light .sc-title,.svc-card.pale .sc-title{color:var(--bk)}
+.sc-desc{font-size:13px;line-height:1.7;flex:1}
+.svc-card.dark .sc-desc,.svc-card.mid .sc-desc{color:rgba(255,255,255,.45)}
+.svc-card.light .sc-desc,.svc-card.pale .sc-desc{color:var(--g5)}
+
+/* ── SERVICES LIST dark ── */
+.sl-sec{background:var(--bk);padding:80px 48px}
+.sl-in{max-width:1120px;margin:0 auto}
+.sl-hdr{display:grid;grid-template-columns:1fr auto;align-items:end;gap:40px;margin-bottom:64px}
+.sl-ttl{font-size:clamp(36px,5.5vw,66px);font-weight:900;letter-spacing:-3px;color:var(--wh);line-height:1.0}
+.sl-sub{font-size:13px;color:rgba(255,255,255,.28);max-width:240px;text-align:right;line-height:1.65}
+.sl-items{display:flex;flex-direction:column}
+.sl-row{
+  display:grid;grid-template-columns:56px 1fr 1fr auto;
+  align-items:center;gap:32px;padding:28px 0;
+  border-top:1px solid rgba(255,255,255,.07);
+  transition:background .2s;cursor:default;
+}
+.sl-row:last-child{border-bottom:1px solid rgba(255,255,255,.07)}
+.sl-row:hover{background:rgba(255,255,255,.03);padding-left:12px;padding-right:12px;margin:0 -12px;border-radius:10px}
+.sl-n{font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.2)}
+.sl-name{font-size:20px;font-weight:800;letter-spacing:-.4px;color:var(--wh)}
+.sl-desc{font-size:13px;color:rgba(255,255,255,.38);line-height:1.6}
+.sl-tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.sl-tag{font-size:11px;font-weight:600;padding:4px 10px;border-radius:var(--pill);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.4);white-space:nowrap;transition:border-color .2s,color .2s}
+.sl-row:hover .sl-tag{border-color:rgba(255,255,255,.28);color:rgba(255,255,255,.7)}
+
+/* ── WHY ── */
+.why-sec{background:var(--g1);border-top:1px solid var(--g2);border-bottom:1px solid var(--g2);position:relative;overflow:hidden}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.why-items{display:flex;flex-direction:column;gap:24px;margin-top:40px}
+.wi{display:flex;gap:16px;align-items:flex-start}
+.wi-num{width:28px;height:28px;border-radius:7px;background:var(--bk);color:var(--wh);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;margin-top:2px}
+.wi-t{font-size:14px;font-weight:700;color:var(--bk);margin-bottom:2px}
+.wi-d{font-size:13px;color:var(--g5);line-height:1.6}
+.why-right{display:flex;flex-direction:column;gap:14px}
+.wc{background:var(--wh);border:1px solid var(--g2);border-radius:14px;padding:28px 28px;transition:transform .2s,box-shadow .2s;cursor:default}
+.wc:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.07)}
+.wc-v{font-size:42px;font-weight:900;letter-spacing:-2px;color:var(--bk);line-height:1}
+.wc-l{font-size:13px;color:var(--g4);margin-top:4px}
+.wc-d{font-size:12px;color:var(--g5);margin-top:8px;line-height:1.55}
+
+/* ── PROCESS MAP ── */
+.proc-sec{padding:80px 48px;background:var(--wh);border-top:1px solid var(--g2);position:relative;overflow:hidden}
+.proc-in{max-width:1120px;margin:0 auto}
+.proc-header{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;margin-bottom:72px}
+.proc-right-txt{font-size:13px;color:var(--g5);line-height:1.7;max-width:340px;align-self:end}
+
+/* Map layout */
+.proc-map{position:relative;padding:12px 0 0}
+
+/* Connecting SVG line */
+.proc-svg{
+  position:absolute;top:22px;left:22px;right:22px;
+  height:2px;overflow:visible;pointer-events:none;
+}
+
+.proc-nodes{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:0;
+  position:relative;z-index:1;
+}
+.proc-node{
+  display:flex;flex-direction:column;
+  align-items:flex-start;
+  padding:0 24px 0 0;
+  cursor:default;
+}
+.proc-node:last-child{padding-right:0}
+
+.node-top{display:flex;align-items:center;gap:0;margin-bottom:28px;width:100%}
+.node-circle{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--bk);color:var(--wh);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;flex-shrink:0;
+  transition:transform .2s,box-shadow .2s;
+  position:relative;z-index:2;
+}
+.proc-node:hover .node-circle{transform:scale(1.1);box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.node-dash{flex:1;height:1px;background:var(--g3);margin-left:0}
+.proc-node:last-child .node-dash{display:none}
+
+.node-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--g4);margin-bottom:8px}
+.node-title{font-size:16px;font-weight:800;color:var(--bk);margin-bottom:8px;letter-spacing:-.3px}
+.node-desc{font-size:12px;color:var(--g5);line-height:1.65;max-width:220px}
+
+/* Milestone dots on the line */
+.node-milestones{
+  position:absolute;top:10px;left:0;right:0;
+  display:flex;justify-content:space-between;
+  padding:0 22px;pointer-events:none;z-index:0;
+}
+.ms-dot{width:8px;height:8px;border-radius:50%;background:var(--g3);border:2px solid var(--wh)}
+
+/* ── CHOOSE YOUR STYLE (templates) ── */
+.tmpl-sec{background:var(--bk);padding:80px 0 60px}
+.tmpl-hdr{padding:0 48px;margin-bottom:48px}
+.tmpl-h2{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-2.5px;color:var(--wh);line-height:1.05;margin-bottom:10px}
+.tmpl-sub{font-size:14px;color:rgba(255,255,255,.32);max-width:480px;line-height:1.6}
+
+.tmpl-scroll{
+  display:flex;gap:16px;overflow-x:auto;
+  padding:0 48px 32px;scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+}
+.tmpl-scroll::-webkit-scrollbar{display:none}
+
+.tmpl-card{
+  flex-shrink:0;width:380px;
+  border-radius:16px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,.03);
+  scroll-snap-align:start;
+  transition:transform .3s,border-color .3s;
+  cursor:grab;
+}
+.tmpl-card:active{cursor:grabbing}
+.tmpl-card:hover{transform:translateY(-10px);border-color:rgba(255,255,255,.22)}
+
+/* Browser chrome */
+.tmpl-chrome{
+  padding:10px 14px;background:rgba(255,255,255,.05);
+  display:flex;align-items:center;gap:6px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.tc-d{width:8px;height:8px;border-radius:50%}
+.tc-bar{flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,.07);margin-left:4px}
+
+/* ── IMMERSIVE TEMPLATE PREVIEWS ── */
+.tmpl-preview{height:480px;overflow:hidden;position:relative;font-family:'Inter',sans-serif}
+
+/* ─ T1: Dark Minimal Café ─ */
+.t1{background:#0a0a0a}
+.t1 .mn{
+  padding:12px 20px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.t1 .mn-logo{font-family:'Fredoka One',cursive;font-size:14px;color:#fff;letter-spacing:-0.5px}
+.t1 .mn-links{display:flex;gap:12px}
+.t1 .mn-link{font-size:9px;font-weight:600;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase}
+.t1 .mn-btn{background:#fff;color:#000;font-size:9px;font-weight:700;padding:5px 12px;border-radius:20px}
+.t1 .hero-t{padding:40px 20px 28px;text-align:center}
+.t1 .hero-t .tag{font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:14px}
+.t1 .hero-t h2{font-size:32px;font-weight:900;color:#fff;letter-spacing:-1.5px;line-height:1;margin-bottom:10px}
+.t1 .hero-t p{font-size:10px;color:rgba(255,255,255,.35);margin-bottom:20px;line-height:1.6}
+.t1 .hero-t .cta{display:inline-block;background:#fff;color:#000;font-size:9px;font-weight:700;padding:9px 20px;border-radius:20px}
+.t1 .img-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 20px}
+.t1 .img-box{height:90px;border-radius:8px;background:#1a1a1a;border:1px solid rgba(255,255,255,.06)}
+.t1 .stats-bar{display:flex;justify-content:space-around;padding:20px;margin-top:16px;border-top:1px solid rgba(255,255,255,.06)}
+.t1 .stat-i .sv{font-size:18px;font-weight:900;color:#fff;letter-spacing:-0.5px}
+.t1 .stat-i .sl{font-size:8px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+
+/* ─ T2: Clean Editorial ─ */
+.t2{background:#fff}
+.t2 .mn{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0f0f0}
+.t2 .mn-logo{font-family:'Fredoka One',cursive;font-size:14px;color:#000}
+.t2 .mn-links{display:flex;gap:14px}
+.t2 .mn-link{font-size:9px;font-weight:600;color:#999;letter-spacing:1px;text-transform:uppercase}
+.t2 .mn-btn{background:#000;color:#fff;font-size:9px;font-weight:700;padding:5px 12px;border-radius:20px}
+.t2 .hero-t{padding:36px 20px 24px}
+.t2 .hero-t .tag{font-size:9px;font-weight:700;letter-spacing:2px;color:#bbb;text-transform:uppercase;margin-bottom:12px}
+.t2 .hero-t h2{font-size:30px;font-weight:900;color:#000;letter-spacing:-1.5px;line-height:1.05;margin-bottom:12px;max-width:260px}
+.t2 .hero-t p{font-size:10px;color:#888;line-height:1.6;margin-bottom:18px;max-width:280px}
+.t2 .hero-t .cta-row{display:flex;gap:8px}
+.t2 .hero-t .cta{background:#000;color:#fff;font-size:9px;font-weight:700;padding:8px 16px;border-radius:20px}
+.t2 .hero-t .cta2{background:transparent;color:#000;font-size:9px;font-weight:600;padding:8px 16px;border-radius:20px;border:1px solid #e0e0e0}
+.t2 .cards-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 20px}
+.t2 .card-i{background:#f8f8f8;border-radius:10px;padding:14px 12px;border:1px solid #eee}
+.t2 .card-i .ci-n{font-size:8px;font-weight:700;color:#ccc;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.t2 .card-i .ci-t{font-size:11px;font-weight:800;color:#000;margin-bottom:4px}
+.t2 .card-i .ci-d{font-size:9px;color:#888;line-height:1.5}
+.t2 .strip{display:flex;gap:8px;padding:16px 20px 0;overflow:hidden}
+.t2 .s-pill{font-size:9px;font-weight:600;color:#888;border:1px solid #e0e0e0;padding:4px 10px;border-radius:20px;white-space:nowrap}
+
+/* ─ T3: Bold Typographic ─ */
+.t3{background:#f5f5f5}
+.t3 .mn{padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+.t3 .mn-logo{font-family:'Fredoka One',cursive;font-size:14px;color:#000}
+.t3 .mn-btn{background:#000;color:#fff;font-size:9px;font-weight:700;padding:5px 12px;border-radius:6px}
+.t3 .hero-t{padding:28px 20px 20px}
+.t3 .big-num{font-size:10px;font-weight:700;color:#bbb;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.t3 .hero-t h2{font-size:52px;font-weight:900;color:#000;letter-spacing:-3px;line-height:.95;margin-bottom:12px}
+.t3 .hero-t p{font-size:10px;color:#888;line-height:1.6;margin-bottom:14px}
+.t3 .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 20px}
+.t3 .ig-box{background:#fff;border-radius:10px;padding:14px;border:1px solid #e5e5e5}
+.t3 .ig-box .igv{font-size:22px;font-weight:900;color:#000;letter-spacing:-1px}
+.t3 .ig-box .igl{font-size:9px;color:#bbb;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.t3 .img-strip{display:flex;gap:8px;padding:12px 20px 0}
+.t3 .is-box{height:60px;flex:1;border-radius:8px;background:#e5e5e5}
+
+/* ─ T4: Warm Restaurant ─ */
+.t4{background:#100d08}
+.t4 .mn{padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(200,150,60,.1)}
+.t4 .mn-logo{font-family:'Fredoka One',cursive;font-size:14px;color:rgba(200,150,60,.9)}
+.t4 .mn-links{display:flex;gap:10px}
+.t4 .mn-link{font-size:9px;font-weight:600;color:rgba(200,150,60,.35);letter-spacing:1px;text-transform:uppercase}
+.t4 .hero-t{padding:20px}
+.t4 .img-hero{height:120px;background:linear-gradient(135deg,#1a1408,#2a1e0a);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;border:1px solid rgba(200,150,60,.08)}
+.t4 .img-hero span{font-size:9px;font-weight:700;color:rgba(200,150,60,.3);letter-spacing:2px;text-transform:uppercase}
+.t4 .menu-label{font-size:9px;font-weight:700;color:rgba(200,150,60,.4);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.t4 .menu-items{display:flex;flex-direction:column;gap:8px}
+.t4 .mi{display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:1px solid rgba(200,150,60,.07)}
+.t4 .mi-name{font-size:11px;font-weight:700;color:rgba(255,255,255,.7)}
+.t4 .mi-price{font-size:11px;font-weight:800;color:rgba(200,150,60,.6)}
+.t4 .mi-desc{font-size:9px;color:rgba(255,255,255,.25);margin-top:2px}
+.t4 .book-strip{margin:16px 0 0;background:rgba(200,150,60,.08);border:1px solid rgba(200,150,60,.15);border-radius:8px;padding:12px;display:flex;align-items:center;justify-content:space-between}
+.t4 .bs-txt{font-size:10px;font-weight:700;color:rgba(200,150,60,.7)}
+.t4 .bs-btn{background:rgba(200,150,60,.8);color:#000;font-size:9px;font-weight:700;padding:6px 12px;border-radius:15px}
+
+/* ─ T5: Trades / Services ─ */
+.t5{background:#fff}
+.t5 .top-bar{background:#0a0a0a;padding:6px 20px;display:flex;align-items:center;justify-content:space-between}
+.t5 .tb-txt{font-size:9px;color:rgba(255,255,255,.4);font-weight:600}
+.t5 .tb-cta{font-size:9px;color:#fff;font-weight:700}
+.t5 .mn{padding:10px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0f0f0}
+.t5 .mn-logo{font-family:'Fredoka One',cursive;font-size:14px;color:#000}
+.t5 .mn-btn{background:#000;color:#fff;font-size:9px;font-weight:700;padding:5px 12px;border-radius:6px}
+.t5 .hero-t{padding:24px 20px 16px;background:#f8f8f8}
+.t5 .hero-t .tag{display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:700;color:#888;border:1px solid #e0e0e0;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+.t5 .hero-t h2{font-size:22px;font-weight:900;color:#000;letter-spacing:-0.8px;line-height:1.1;margin-bottom:8px}
+.t5 .hero-t p{font-size:10px;color:#888;line-height:1.6}
+.t5 .svc-list{padding:16px 20px}
+.t5 .svc-it{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0f0}
+.t5 .si-left{display:flex;gap:10px;align-items:center}
+.t5 .si-icon{width:28px;height:28px;background:#f0f0f0;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.t5 .si-name{font-size:11px;font-weight:700;color:#000}
+.t5 .si-chev{font-size:11px;color:#ccc}
+.t5 .trust-row{display:flex;gap:8px;padding:12px 20px 0}
+.t5 .tr-badge{font-size:9px;font-weight:700;color:#888;background:#f5f5f5;border-radius:20px;padding:4px 10px;border:1px solid #e8e8e8}
+
+.tmpl-label{padding:16px 20px;border-top:1px solid rgba(255,255,255,.07)}
+.tmpl-name{font-size:14px;font-weight:700;color:var(--wh);margin-bottom:2px}
+.tmpl-type{font-size:11px;color:rgba(255,255,255,.3)}
+
+.drag-hint{
+  display:flex;align-items:center;gap:12px;
+  padding:0 48px;margin-bottom:20px;
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:rgba(255,255,255,.2);
+}
+.dh-line{flex:1;height:1px;background:rgba(255,255,255,.07)}
+
+/* ── BOOK A CALL ── */
+.book-sec{padding:80px 48px;background:var(--g1);border-top:1px solid var(--g2);border-bottom:1px solid var(--g2);position:relative;overflow:hidden}
+.book-in{max-width:980px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.book-left p{font-size:14px;color:var(--g5);line-height:1.7;margin-bottom:28px;margin-top:12px}
+.book-checklist{display:flex;flex-direction:column;gap:10px}
+.bc-item{display:flex;gap:10px;font-size:13px;color:var(--g5)}
+.bc-item::before{content:'✓';font-weight:800;color:var(--bk);flex-shrink:0}
+.book-form{background:var(--wh);border:1px solid var(--g2);border-radius:18px;padding:40px 36px}
+.book-form h3{font-size:18px;font-weight:800;letter-spacing:-.4px;margin-bottom:24px}
+.b-field{margin-bottom:14px}
+.b-field label{display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--g5);margin-bottom:7px}
+.b-field input,.b-field select{
+  width:100%;background:var(--g1);border:1.5px solid var(--g2);
+  border-radius:9px;padding:11px 14px;
+  font-size:14px;color:var(--bk);font-family:'Inter',sans-serif;
+  outline:none;transition:border-color .2s;-webkit-appearance:none;
+}
+.b-field input:focus,.b-field select:focus{border-color:var(--bk)}
+.b-field input::placeholder{color:var(--g3)}
+.b-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.b-submit{
+  background:var(--bk);color:var(--wh);padding:13px;
+  border-radius:var(--pill);font-size:14px;font-weight:700;
+  border:none;cursor:pointer;width:100%;margin-top:6px;
+  transition:opacity .2s,transform .15s;
+}
+.b-submit:hover{opacity:.82;transform:translateY(-1px)}
+.b-success{display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:9px;padding:12px 16px;font-size:13px;color:#15803d;font-weight:600;margin-top:12px}
+
+/* ── PRICING ── */
+.price-hero{padding:72px 48px 56px;text-align:center;border-bottom:1px solid var(--g2)}
+.price-hero h1{font-size:clamp(40px,6.5vw,76px);font-weight:900;letter-spacing:-3px;margin-bottom:14px}
+.price-hero p{font-size:15px;color:var(--g5);max-width:460px;margin:0 auto}
+.price-cards{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:900px;margin:0 auto;padding:72px 48px}
+.pc{border-radius:20px;padding:44px 40px;border:1.5px solid var(--g2);background:var(--wh);transition:transform .2s,box-shadow .2s}
+.pc:hover{transform:translateY(-5px);box-shadow:0 16px 48px rgba(0,0,0,.08)}
+.pc.feat{background:var(--bk);border-color:var(--bk);color:var(--wh)}
+.pc-plan{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--g4);margin-bottom:24px}
+.pc.feat .pc-plan{color:#444}
+.pc-badge{display:inline-block;background:var(--wh);color:var(--bk);font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:4px 12px;border-radius:var(--pill);margin-bottom:24px}
+.pc-price{font-size:62px;font-weight:900;letter-spacing:-3px;line-height:1;color:var(--bk)}
+.pc.feat .pc-price{color:var(--wh)}
+.pc-price sup{font-size:26px;font-weight:700;vertical-align:super;letter-spacing:0}
+.pc-period{font-size:13px;color:var(--g4);margin-bottom:32px;margin-top:4px}
+.pc.feat .pc-period{color:#444}
+.pc-div{height:1px;background:var(--g2);margin:28px 0}
+.pc.feat .pc-div{background:#1e1e1e}
+.pc-inc{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--g4);margin-bottom:16px}
+.pc.feat .pc-inc{color:#444}
+.pc-list{list-style:none;display:flex;flex-direction:column;gap:11px;margin-bottom:36px}
+.pc-list li{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--g6);line-height:1.5}
+.pc.feat .pc-list li{color:#999}
+.pc-list li::before{content:'✓';font-weight:800;flex-shrink:0;margin-top:1px;color:var(--bk)}
+.pc.feat .pc-list li::before{color:var(--wh)}
+.pc-btn{display:block;text-align:center;padding:14px;border-radius:var(--pill);font-weight:700;font-size:14px;cursor:pointer;border:none;text-decoration:none;transition:opacity .2s}
+.pc-btn.dark{background:var(--bk);color:var(--wh)}
+.pc-btn.lite{background:var(--wh);color:var(--bk)}
+.pc-btn:hover{opacity:.82}
+
+.price-g{text-align:center;max-width:600px;margin:0 auto;padding:0 48px 72px}
+.pg-box{background:var(--g1);border:1px solid var(--g2);border-radius:var(--r);padding:28px 32px;display:flex;align-items:flex-start;gap:16px;text-align:left}
+.pg-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.pg-desc{font-size:13px;color:var(--g5);line-height:1.6}
+
+/* ── FAQ dark ── */
+.faq-sec{background:var(--bk);padding:80px 48px}
+.faq-in{max-width:760px;margin:0 auto}
+.faq-ttl{font-size:clamp(32px,4.5vw,56px);font-weight:900;letter-spacing:-2.5px;color:var(--wh);margin-bottom:8px}
+.faq-sub{font-size:14px;color:rgba(255,255,255,.28);margin-bottom:52px}
+.faq-item{border-bottom:1px solid rgba(255,255,255,.07);overflow:hidden}
+.faq-q{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;cursor:pointer;font-size:14px;font-weight:700;color:var(--wh);user-select:none;transition:color .2s}
+.faq-q:hover{color:rgba(255,255,255,.7)}
+.faq-ico{width:24px;height:24px;border-radius:50%;border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:13px;color:rgba(255,255,255,.4);flex-shrink:0;transition:transform .25s,background .25s,border-color .25s}
+.faq-item.open .faq-ico{transform:rotate(45deg);background:var(--wh);border-color:var(--wh);color:var(--bk)}
+.faq-a{font-size:13px;color:rgba(255,255,255,.38);line-height:1.75;padding-bottom:22px;display:none}
+.faq-item.open .faq-a{display:block}
+
+/* ── CONTACT ── */
+.contact-wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:72px;max-width:1020px;margin:0 auto;padding:72px 48px 100px;align-items:start}
+.c-h1{font-size:clamp(36px,4.5vw,56px);font-weight:900;letter-spacing:-2px;line-height:1.05;margin-bottom:16px}
+.c-p{font-size:14px;color:var(--g5);line-height:1.7;margin-bottom:40px}
+.c-details{display:flex;flex-direction:column;gap:12px}
+.c-link{display:flex;align-items:center;gap:14px;padding:15px 18px;border:1.5px solid var(--g2);border-radius:10px;text-decoration:none;color:inherit;transition:border-color .2s,transform .15s}
+.c-link:hover{border-color:var(--bk);transform:translateX(4px)}
+.c-icon{font-size:18px;width:32px;text-align:center;flex-shrink:0}
+.c-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--g4);margin-bottom:2px}
+.c-val{font-size:13px;font-weight:600;color:var(--bk)}
+.c-form-box{background:var(--g1);border:1px solid var(--g2);border-radius:18px;padding:40px 36px}
+.c-form-box h3{font-size:18px;font-weight:800;letter-spacing:-.4px;margin-bottom:26px}
+.c-form{display:flex;flex-direction:column;gap:14px}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cf-field label{display:block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--g5);margin-bottom:6px}
+.cf-field input,.cf-field textarea,.cf-field select{width:100%;background:var(--wh);border:1.5px solid var(--g2);border-radius:9px;padding:11px 14px;font-size:14px;color:var(--bk);font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.cf-field input:focus,.cf-field textarea:focus,.cf-field select:focus{border-color:var(--bk)}
+.cf-field input::placeholder,.cf-field textarea::placeholder{color:var(--g3)}
+.cf-field textarea{resize:vertical;min-height:100px}
+.cf-sub{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.cf-note{font-size:12px;color:var(--g4)}
+.cf-success{display:none;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:9px;padding:12px 16px;font-size:13px;color:#15803d;font-weight:600}
+.btn-bk{background:var(--bk);color:var(--wh);padding:13px 28px;border-radius:var(--pill);font-size:14px;font-weight:700;border:none;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity .2s,transform .15s}
+.btn-bk:hover{opacity:.82;transform:translateY(-1px)}
+
+/* ── BOTTOM CTA ── */
+.btm-cta{background:var(--bk);padding:100px 48px;text-align:center}
+.btm-cta h2{font-size:clamp(36px,5.5vw,72px);font-weight:900;letter-spacing:-3px;color:var(--wh);margin-bottom:16px;line-height:1.05}
+.btm-cta p{font-size:15px;color:rgba(255,255,255,.35);max-width:460px;margin:0 auto 40px}
+
+/* ── FOOTER ── */
+footer{background:var(--g1);border-top:1px solid var(--g2);padding:36px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.f-logo{font-family:'Fredoka One',cursive;font-size:22px;color:var(--bk);cursor:pointer;user-select:none}
+.f-copy{font-size:12px;color:var(--g4)}
+.f-nav{display:flex;gap:24px}
+.f-nav a{font-size:12px;color:var(--g5);text-decoration:none;cursor:pointer;transition:color .2s}
+.f-nav a:hover{color:var(--bk)}
+
+/* ── HERO LOGO ── */
+.hero-logo{
+  font-family:'Fredoka One',cursive;
+  font-size:clamp(28px,4vw,48px);
+  color:var(--wh);opacity:.55;
+  letter-spacing:-0.5px;margin-bottom:18px;
+  line-height:1;display:block;
+}
+
+/* ── BG ANIMATION LAYERS ── */
+.sec-bg,.why-bg,.proc-bg,.book-bg{
+  position:absolute;inset:0;
+  pointer-events:none;overflow:hidden;z-index:0;
+}
+/* ensure inner content stays above */
+.sec .sin,.why-sec .sin,.proc-in,.book-in{position:relative;z-index:1}
+
+/* Slow-drift dot grid (white sections) */
+.bg-dots{
+  position:absolute;inset:-40px;
+  background-image:radial-gradient(circle,rgba(0,0,0,.038) 1px,transparent 1px);
+  background-size:30px 30px;
+  animation:bgdd 50s linear infinite;
+}
+@keyframes bgdd{from{background-position:0 0}to{background-position:30px 30px}}
+
+/* Soft floating orbs (grey sections) */
+.bg-orb{position:absolute;border-radius:50%;filter:blur(90px)}
+.bo1{width:460px;height:460px;background:radial-gradient(circle,rgba(0,0,0,.06),transparent 70%);top:-140px;right:-100px;animation:bof1 24s ease-in-out infinite}
+.bo2{width:300px;height:300px;background:radial-gradient(circle,rgba(0,0,0,.045),transparent 70%);bottom:-70px;left:-70px;animation:bof2 30s ease-in-out infinite}
+@keyframes bof1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-26px,16px) scale(1.06)}}
+@keyframes bof2{0%,100%{transform:translate(0,0)}50%{transform:translate(16px,-12px)}}
+
+/* Sweeping horizontal line (process) */
+.bg-sweep{
+  position:absolute;left:0;right:0;height:1px;top:0;
+  background:linear-gradient(90deg,transparent,rgba(0,0,0,.07) 50%,transparent);
+  animation:bgsw 11s ease-in-out infinite;
+}
+@keyframes bgsw{0%{top:0;opacity:0}8%{opacity:1}92%{opacity:.18}100%{top:100%;opacity:0}}
+
+/* ── INTERACTIONS ── */
+.pastel-card,.wc,.proc-node,.tmpl-card{transition:transform .25s ease,box-shadow .25s ease}
+
+/* Scroll reveal */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
+.reveal.shown{opacity:1;transform:translateY(0)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  nav{padding:0 24px}
+  .sec{padding:64px 24px}
+  .sl-sec,.tmpl-sec,.book-sec,.faq-sec,.btm-cta{padding:64px 24px}
+  .svc-grid{grid-template-columns:1fr 1fr}
+  .svc-card{border-right:none;border-bottom:1px solid var(--g2)}
+  .svc-intro{grid-template-columns:1fr;gap:12px}
+  .svc-intro-right{text-align:left}
+  .sl-row{grid-template-columns:40px 1fr;gap:16px}
+  .sl-desc,.sl-tags{display:none}
+  .why-grid{grid-template-columns:1fr;gap:40px}
+  .proc-header{grid-template-columns:1fr;gap:12px}
+  .proc-nodes{grid-template-columns:1fr 1fr;gap:32px}
+  .node-dash{display:none}
+  .book-in{grid-template-columns:1fr;gap:40px}
+  .price-cards{grid-template-columns:1fr;padding:48px 24px;max-width:100%}
+  .contact-wrap{grid-template-columns:1fr;gap:40px;padding:60px 24px 80px}
+  .tmpl-scroll{padding:0 24px 32px}
+  .tmpl-hdr,.drag-hint{padding:0 24px}
+  .price-hero,.price-g{padding-left:24px;padding-right:24px}
+  footer{padding:28px 24px;flex-direction:column;align-items:flex-start}
+}
+@media(max-width:600px){
+  .cf-row{grid-template-columns:1fr}
+  .b-row{grid-template-columns:1fr}
+  .hero h1{letter-spacing:-2px}
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainnav">
+  <span class="nav-logo" onclick="showPage('home')">WebW</span>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li class="nav-item"><a onclick="showPage('home')">Home</a></li>
+      <li class="nav-item">
+        <a>Web Design <span class="chev">▾</span></a>
+        <div class="nav-dropdown">
+          <span class="dd-label">What We Build</span>
+          <a class="dd-item" onclick="showPage('home')">Custom Website Design</a>
+          <a class="dd-item" onclick="showPage('home')">E-Commerce Stores</a>
+          <a class="dd-item" onclick="showPage('home')">Landing Pages</a>
+          <a class="dd-item" onclick="showPage('home')">Website Redesigns</a>
+          <span class="dd-label" style="margin-top:6px">Additional</span>
+          <a class="dd-item" onclick="showPage('home')">SEO &amp; Local Search</a>
+          <a class="dd-item" onclick="showPage('home')">Hosting &amp; Maintenance</a>
+        </div>
+      </li>
+      <li class="nav-item"><a onclick="showPage('pricing')">Pricing</a></li>
+    </ul>
+    <a class="nav-cta" onclick="showPage('contact')">Get a free demo →</a>
+  </div>
+</nav>
+
+
+<!-- ══════════════ HOME ══════════════ -->
+<div id="page-home" class="page active">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <span class="hero-logo">WebW</span>
+    <h1>Websites built for<br><em>Brisbane</em> businesses.</h1>
+    <p class="hero-sub">Custom web design for cafés, trades, retail, and professional services. Fast, clean, and live in 7 days.</p>
+    <div class="hero-actions">
+      <a class="btn-wh" onclick="showPage('contact')">Get a free demo →</a>
+      <a class="btn-gh" onclick="showPage('pricing')">View pricing</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="scroll-bar"></div>scroll</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq-wrap">
+  <div class="mq-track">
+    <span>Web Design</span><span class="s">·</span><span>Brisbane</span><span class="s">·</span><span>Live in 7 Days</span><span class="s">·</span><span>Mobile First</span><span class="s">·</span><span>SEO Ready</span><span class="s">·</span><span>Cafés</span><span class="s">·</span><span>Retail</span><span class="s">·</span><span>Trades</span><span class="s">·</span><span>One-on-One Care</span><span class="s">·</span><span>Demo in 48 hrs</span><span class="s">·</span><span>Free Demo</span><span class="s">·</span>
+    <span>Web Design</span><span class="s">·</span><span>Brisbane</span><span class="s">·</span><span>Live in 7 Days</span><span class="s">·</span><span>Mobile First</span><span class="s">·</span><span>SEO Ready</span><span class="s">·</span><span>Cafés</span><span class="s">·</span><span>Retail</span><span class="s">·</span><span>Trades</span><span class="s">·</span><span>One-on-One Care</span><span class="s">·</span><span>Demo in 48 hrs</span><span class="s">·</span><span>Free Demo</span><span class="s">·</span>
+  </div>
+</div>
+
+<!-- SERVICES — B&W cards -->
+<div class="sec" style="position:relative;overflow:hidden">
+  <div class="sec-bg"><div class="bg-dots"></div></div>
+  <div class="sin">
+    <div class="svc-intro">
+      <div>
+        <div class="stag">(Services)</div>
+        <h2 class="sh2">A simple process —<br>whether new or refreshing.</h2>
+      </div>
+      <div></div>
+      <div class="svc-intro-right">We've refined our approach to be as seamless as the websites we build — professional, clear, and built around your business.</div>
+    </div>
+    <div class="svc-grid reveal">
+      <div class="svc-card dark">
+        <div class="sc-num">(01)</div>
+        <div class="sc-title">Website Design</div>
+        <div class="sc-desc">Every site is designed from scratch. Clean layouts, strong hierarchy, and a look built around your brand — never templated.</div>
+      </div>
+      <div class="svc-card pale">
+        <div class="sc-num">(02)</div>
+        <div class="sc-title">Mobile-First Build</div>
+        <div class="sc-desc">Built to perform on every device. Fast load times and a flawless experience on phone, tablet, and desktop from the ground up.</div>
+      </div>
+      <div class="svc-card mid">
+        <div class="sc-num">(03)</div>
+        <div class="sc-title">SEO &amp; Performance</div>
+        <div class="sc-desc">Search foundations embedded into every build — structured data, local SEO, Google Business setup, and 90+ PageSpeed scores.</div>
+      </div>
+      <div class="svc-card light" style="border-left:1px solid var(--g2)">
+        <div class="sc-num">(04)</div>
+        <div class="sc-title">Launch &amp; Ongoing Care</div>
+        <div class="sc-desc">Hosting, backups, security, and content updates — all covered after launch so you never have to think about your website again.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES LIST dark -->
+<div class="sl-sec">
+  <div class="sl-in">
+    <div class="sl-hdr">
+      <div class="sl-ttl">Feature Stacked.<br>Value Packed.</div>
+      <div class="sl-sub">A full-service web design partner for Brisbane businesses of all sizes and industries.</div>
+    </div>
+    <div class="sl-items">
+      <div class="sl-row reveal">
+        <div class="sl-n">(01)</div>
+        <div class="sl-name">Web Design &amp; Development</div>
+        <div class="sl-desc">Custom sites built from first principles — no page builders, no shortcuts. Every layout is purpose-designed for your business and audience.</div>
+        <div class="sl-tags"><span class="sl-tag">Business</span><span class="sl-tag">E-Commerce</span><span class="sl-tag">Custom</span><span class="sl-tag">Landing Pages</span></div>
+      </div>
+      <div class="sl-row reveal">
+        <div class="sl-n">(02)</div>
+        <div class="sl-name">Web Hosting &amp; Email</div>
+        <div class="sl-desc">Fast, reliable hosting and professional email setup handled end-to-end. SSL, backups, and uptime monitoring all included.</div>
+        <div class="sl-tags"><span class="sl-tag">Hosting</span><span class="sl-tag">SSL</span><span class="sl-tag">Email</span><span class="sl-tag">Backups</span></div>
+      </div>
+      <div class="sl-row reveal">
+        <div class="sl-n">(03)</div>
+        <div class="sl-name">Ongoing Management</div>
+        <div class="sl-desc">Content updates, performance reports, security monitoring, and priority support — keeping your site in peak condition.</div>
+        <div class="sl-tags"><span class="sl-tag">Maintenance</span><span class="sl-tag">Content</span><span class="sl-tag">Reports</span><span class="sl-tag">Support</span></div>
+      </div>
+      <div class="sl-row reveal">
+        <div class="sl-n">(04)</div>
+        <div class="sl-name">SEO &amp; Local Search</div>
+        <div class="sl-desc">Get found when Brisbane locals search for what you do. Technical SEO, Google Business profile, and local optimisation built in from day one.</div>
+        <div class="sl-tags"><span class="sl-tag">Local SEO</span><span class="sl-tag">Google Business</span><span class="sl-tag">Analytics</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY WEBW -->
+<div class="sec why-sec">
+  <div class="why-bg"><div class="bg-orb bo1"></div><div class="bg-orb bo2"></div></div>
+  <div class="sin">
+    <div class="why-grid">
+      <div>
+        <div class="stag">Why WebW</div>
+        <h2 class="sh2">One developer.<br>One client.<br>Full focus.</h2>
+        <p class="slead">When you work with WebW, you work directly with the developer building your site. No account managers, no miscommunication — just fast decisions and a site that truly represents your business.</p>
+        <div class="why-items">
+          <div class="wi reveal"><div class="wi-num">1</div><div><div class="wi-t">Direct one-on-one developer access</div><div class="wi-d">You speak to Rupert — the person writing your code — from first call to final launch and beyond.</div></div></div>
+          <div class="wi reveal"><div class="wi-num">2</div><div><div class="wi-t">Free demo before any commitment</div><div class="wi-d">We build a personalised demo site before you spend a cent. See exactly what you're getting first.</div></div></div>
+          <div class="wi reveal"><div class="wi-num">3</div><div><div class="wi-t">Transparent, no-surprise delivery</div><div class="wi-d">No hidden costs, no lock-in contracts, and no agency jargon — just honest work delivered on time.</div></div></div>
+          <div class="wi reveal"><div class="wi-num">4</div><div><div class="wi-t">Local Brisbane knowledge</div><div class="wi-d">We know the Brisbane market and build sites that connect with local customers and rank locally.</div></div></div>
+        </div>
+      </div>
+      <div class="why-right">
+        <div class="wc reveal"><div class="wc-v">48 hrs</div><div class="wc-l">Demo ready before you commit</div><div class="wc-d">We build your personalised demo site before you spend a cent — so you know exactly what you're getting.</div></div>
+        <div class="wc reveal"><div class="wc-v">7 days</div><div class="wc-l">Average time from sign-off to live</div><div class="wc-d">Fast, focused delivery — your site is live within a week of final approval.</div></div>
+        <div class="wc reveal"><div class="wc-v">1 : 1</div><div class="wc-l">Direct developer access, always</div><div class="wc-d">You work directly with the developer building your site — no account managers, no delays, no confusion.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESS MAP -->
+<div class="proc-sec">
+  <div class="proc-bg"><div class="bg-sweep"></div><div class="bg-dots" style="opacity:.6"></div></div>
+  <div class="proc-in">
+    <div class="proc-header">
+      <div>
+        <div class="stag">(Process)</div>
+        <h2 class="sh2">A simple process whether<br>creating new or refreshing.</h2>
+      </div>
+      <div class="proc-right-txt">We've refined our workflow to be as seamless as the websites we build — clear steps, fast timelines, and no guesswork.</div>
+    </div>
+
+    <div class="proc-map">
+      <div class="proc-nodes">
+        <div class="proc-node reveal">
+          <div class="node-top">
+            <div class="node-circle">01</div>
+            <div class="node-dash"></div>
+          </div>
+          <div class="node-tag">Week 1 · Days 1–2</div>
+          <div class="node-title">Discovery Stage</div>
+          <div class="node-desc">We take a consultative approach to understand your business, audience, and goals. We define the strategic purpose of your site — not just its aesthetics.</div>
+        </div>
+        <div class="proc-node reveal">
+          <div class="node-top">
+            <div class="node-circle">02</div>
+            <div class="node-dash"></div>
+          </div>
+          <div class="node-tag">Week 1 · Days 2–3</div>
+          <div class="node-title">Design Stage</div>
+          <div class="node-desc">Every UI/UX layout is designed from first principles, never templated. You can clearly see your identity take shape before development begins.</div>
+        </div>
+        <div class="proc-node reveal">
+          <div class="node-top">
+            <div class="node-circle">03</div>
+            <div class="node-dash"></div>
+          </div>
+          <div class="node-tag">Week 1 · Days 4–6</div>
+          <div class="node-title">Development</div>
+          <div class="node-desc">Lightning-fast, mobile-responsive code. SEO foundations and performance optimisation built directly into the site architecture from the start.</div>
+        </div>
+        <div class="proc-node reveal">
+          <div class="node-top">
+            <div class="node-circle">04</div>
+          </div>
+          <div class="node-tag">Week 1 · Day 7</div>
+          <div class="node-title">Launch &amp; Training</div>
+          <div class="node-desc">Cross-device testing and a personalised walkthrough so you can confidently manage your site. Then we go live — on time, every time.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHOOSE YOUR STYLE -->
+<div class="tmpl-sec">
+  <div class="tmpl-hdr">
+    <div class="stag" style="color:rgba(255,255,255,.3)">(Style)</div>
+    <div class="tmpl-h2">Choose your style.</div>
+    <div class="tmpl-sub">Our web design process offers an extensive list of styles to meet your specific needs — drag to explore what your site could look like.</div>
+  </div>
+
+  <div class="drag-hint">
+    <div class="dh-line"></div>
+    <span>drag to explore</span>
+    <div class="dh-line"></div>
+  </div>
+
+  <div class="tmpl-scroll" id="tmplScroll">
+
+    <!-- T1: Dark Minimal Café -->
+    <div class="tmpl-card">
+      <div class="tmpl-chrome"><div class="tc-d" style="background:#ff5f57"></div><div class="tc-d" style="background:#ffbd2e"></div><div class="tc-d" style="background:#28c840"></div><div class="tc-bar"></div></div>
+      <div class="tmpl-preview t1">
+        <div class="mn"><div class="mn-logo">Roast</div><div class="mn-links"><span class="mn-link">Menu</span><span class="mn-link">About</span><span class="mn-link">Find Us</span></div><div class="mn-btn">Order</div></div>
+        <div class="hero-t"><div class="tag">Specialty Coffee · Est. 2019</div><h2>Coffee<br>Reimagined.</h2><p>Single origin beans, brewed with precision.<br>West End, Brisbane.</p><div class="cta">View Menu →</div></div>
+        <div class="img-row"><div class="img-box"></div><div class="img-box"></div><div class="img-box"></div></div>
+        <div class="stats-bar"><div class="stat-i"><div class="sv">12+</div><div class="sl">Origins</div></div><div class="stat-i"><div class="sv">8am</div><div class="sl">Opens</div></div><div class="stat-i"><div class="sv">4.9★</div><div class="sl">Google</div></div></div>
+      </div>
+      <div class="tmpl-label"><div class="tmpl-name">Dark Minimal</div><div class="tmpl-type">Café & Hospitality · Premium dark aesthetic</div></div>
+    </div>
+
+    <!-- T2: Clean Editorial -->
+    <div class="tmpl-card">
+      <div class="tmpl-chrome"><div class="tc-d" style="background:#ff5f57"></div><div class="tc-d" style="background:#ffbd2e"></div><div class="tc-d" style="background:#28c840"></div><div class="tc-bar"></div></div>
+      <div class="tmpl-preview t2">
+        <div class="mn"><div class="mn-logo">Forma</div><div class="mn-links"><span class="mn-link">Services</span><span class="mn-link">Work</span><span class="mn-link">Contact</span></div><div class="mn-btn">Get Started</div></div>
+        <div class="hero-t"><div class="tag">Professional Services · Brisbane</div><h2>We help businesses grow online.</h2><p>Strategy, design, and development for Brisbane's best businesses.</p><div class="cta-row"><div class="cta">Get a Quote →</div><div class="cta2">See Work</div></div></div>
+        <div class="cards-row"><div class="card-i"><div class="ci-n">(01)</div><div class="ci-t">Strategy</div><div class="ci-d">Data-driven decisions.</div></div><div class="card-i"><div class="ci-n">(02)</div><div class="ci-t">Design</div><div class="ci-d">Clean, modern visuals.</div></div><div class="card-i"><div class="ci-n">(03)</div><div class="ci-t">Launch</div><div class="ci-d">Live in 7 days.</div></div></div>
+        <div class="strip"><span class="s-pill">Branding</span><span class="s-pill">Web Design</span><span class="s-pill">SEO</span><span class="s-pill">E-Commerce</span></div>
+      </div>
+      <div class="tmpl-label"><div class="tmpl-name">Clean Editorial</div><div class="tmpl-type">Professional Services · Minimal & crisp</div></div>
+    </div>
+
+    <!-- T3: Bold Typographic -->
+    <div class="tmpl-card">
+      <div class="tmpl-chrome"><div class="tc-d" style="background:#ff5f57"></div><div class="tc-d" style="background:#ffbd2e"></div><div class="tc-d" style="background:#28c840"></div><div class="tc-bar"></div></div>
+      <div class="tmpl-preview t3">
+        <div class="mn"><div class="mn-logo">Knox</div><div class="mn-btn">Contact</div></div>
+        <div class="hero-t"><div class="big-num">Est. 2018 · Brisbane</div><h2>Bold.<br>Fast.<br>Yours.</h2><p>Web design that doesn't look like everyone else's. Built from scratch, every time.</p></div>
+        <div class="info-grid"><div class="ig-box"><div class="igv">240+</div><div class="igl">Projects</div></div><div class="ig-box"><div class="igv">7 days</div><div class="igl">Turnaround</div></div></div>
+        <div class="img-strip"><div class="is-box"></div><div class="is-box"></div><div class="is-box"></div></div>
+      </div>
+      <div class="tmpl-label"><div class="tmpl-name">Bold Typographic</div><div class="tmpl-type">Agencies & Studios · High impact type</div></div>
+    </div>
+
+    <!-- T4: Warm Restaurant -->
+    <div class="tmpl-card">
+      <div class="tmpl-chrome"><div class="tc-d" style="background:#ff5f57"></div><div class="tc-d" style="background:#ffbd2e"></div><div class="tc-d" style="background:#28c840"></div><div class="tc-bar"></div></div>
+      <div class="tmpl-preview t4">
+        <div class="mn"><div class="mn-logo">Ember</div><div class="mn-links"><span class="mn-link">Menu</span><span class="mn-link">Events</span><span class="mn-link">Reserve</span></div></div>
+        <div class="hero-t" style="padding:16px 20px">
+          <div class="img-hero"><span>Restaurant Interior</span></div>
+          <div class="menu-label">Tonight's Menu</div>
+          <div class="menu-items">
+            <div class="mi"><div><div class="mi-name">Seared Barramundi</div><div class="mi-desc">Lemon butter, seasonal greens</div></div><div class="mi-price">$38</div></div>
+            <div class="mi"><div><div class="mi-name">Wagyu Sirloin 250g</div><div class="mi-desc">Truffle jus, crispy potatoes</div></div><div class="mi-price">$52</div></div>
+          </div>
+          <div class="book-strip"><div class="bs-txt">Reserve a table →</div><div class="bs-btn">Book Now</div></div>
+        </div>
+      </div>
+      <div class="tmpl-label"><div class="tmpl-name">Warm Restaurant</div><div class="tmpl-type">Dining & Hospitality · Rich warm tones</div></div>
+    </div>
+
+    <!-- T5: Trades & Services -->
+    <div class="tmpl-card">
+      <div class="tmpl-chrome"><div class="tc-d" style="background:#ff5f57"></div><div class="tc-d" style="background:#ffbd2e"></div><div class="tc-d" style="background:#28c840"></div><div class="tc-bar"></div></div>
+      <div class="tmpl-preview t5">
+        <div class="top-bar"><div class="tb-txt">📍 Serving all of Brisbane</div><div class="tb-cta">Call Now</div></div>
+        <div class="mn"><div class="mn-logo">ProTrades</div><div class="mn-btn">Free Quote</div></div>
+        <div class="hero-t"><div class="tag">✓ Licensed &amp; Insured · Brisbane</div><h2>Brisbane's trusted trades team.</h2><p>Plumbing, electrical &amp; more. Same-day service, upfront pricing.</p></div>
+        <div class="svc-list">
+          <div class="svc-it"><div class="si-left"><div class="si-icon">🔧</div><div class="si-name">Plumbing</div></div><div class="si-chev">›</div></div>
+          <div class="svc-it"><div class="si-left"><div class="si-icon">⚡</div><div class="si-name">Electrical</div></div><div class="si-chev">›</div></div>
+          <div class="svc-it"><div class="si-left"><div class="si-icon">❄️</div><div class="si-name">Air Conditioning</div></div><div class="si-chev">›</div></div>
+        </div>
+        <div class="trust-row"><span class="tr-badge">★ 4.9 Google</span><span class="tr-badge">✓ 10+ Years</span><span class="tr-badge">🛡 Fully Insured</span></div>
+      </div>
+      <div class="tmpl-label"><div class="tmpl-name">Trades &amp; Services</div><div class="tmpl-type">Local Business · Clean, trust-focused</div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BOOK A CALL -->
+<div class="book-sec">
+  <div class="book-bg"><div class="bg-orb bo1" style="opacity:.5"></div><div class="bg-orb bo2" style="opacity:.4"></div></div>
+  <div class="book-in">
+    <div class="book-left">
+      <div class="stag">Book a Call</div>
+      <h2 class="sh2">Book a free<br>15-minute call.</h2>
+      <p>No pitch, no pressure — just a quick conversation with your developer. You'll walk away with a clear idea of what your site could look like and what it would cost.</p>
+      <div class="book-checklist">
+        <div class="bc-item">Talk directly to your developer</div>
+        <div class="bc-item">Get an honest take on what you need</div>
+        <div class="bc-item">No obligation — cancel anytime</div>
+        <div class="bc-item">All calls via Google Meet or phone</div>
+      </div>
+    </div>
+    <div class="book-form">
+      <h3>Pick a time →</h3>
+      <div class="b-row">
+        <div class="b-field">
+          <label>Your name</label>
+          <input type="text" placeholder="Jane Smith">
+        </div>
+        <div class="b-field">
+          <label>Email</label>
+          <input type="email" placeholder="jane@business.com">
+        </div>
+      </div>
+      <div class="b-field">
+        <label>Business name</label>
+        <input type="text" placeholder="Smith's Café">
+      </div>
+      <div class="b-row">
+        <div class="b-field">
+          <label>Preferred date</label>
+          <input type="date" id="bookDate">
+        </div>
+        <div class="b-field">
+          <label>Preferred time (AEST)</label>
+          <select id="bookTime">
+            <option value="">Select a time</option>
+            <option>12:00 PM</option>
+            <option>12:30 PM</option>
+            <option>1:00 PM</option>
+            <option>1:30 PM</option>
+            <option>2:00 PM</option>
+            <option>2:30 PM</option>
+            <option>3:00 PM</option>
+            <option>3:30 PM</option>
+            <option>4:00 PM</option>
+            <option>4:30 PM</option>
+            <option>5:00 PM</option>
+          </select>
+        </div>
+      </div>
+      <button class="b-submit" onclick="bookCall(this)">Book my call →</button>
+      <div class="b-success" id="bookSuccess">✓ Booked! We'll send a confirmation to your email shortly.</div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM CTA -->
+<div class="btm-cta">
+  <h2>Start with a<br>free demo.</h2>
+  <p>We build it before you spend anything. Ready within 48 hours.</p>
+  <a class="btn-wh" onclick="showPage('contact')">Get your free demo →</a>
+</div>
+
+</div><!-- /home -->
+
+
+<!-- ══════════════ PRICING ══════════════ -->
+<div id="page-pricing" class="page">
+<div class="price-hero">
+  <div class="stag" style="display:block;text-align:center;margin-bottom:12px">Pricing</div>
+  <h1>Simple. Honest.<br>Flat-rate.</h1>
+  <p>No surprise invoices. No lock-in. A fair price for a proper website and a developer you can actually reach.</p>
+</div>
+<div class="price-cards">
+  <div class="pc">
+    <div class="pc-plan">Essential</div>
+    <div class="pc-price"><sup>$</sup>499</div>
+    <div class="pc-period">build fee, then $149 / month</div>
+    <div class="pc-div"></div>
+    <div class="pc-inc">What's included</div>
+    <ul class="pc-list">
+      <li>Custom-designed website (up to 4 pages)</li>
+      <li>Mobile-responsive on all screens</li>
+      <li>Your branding, photos &amp; content</li>
+      <li>Google Maps, hours &amp; contact form</li>
+      <li>Basic SEO setup &amp; Google indexing</li>
+      <li>2 rounds of revisions</li>
+      <li>Live within 7 days of sign-off</li>
+      <li>Hosting, SSL &amp; monthly backups included</li>
+      <li>Direct developer access via email</li>
+      <li>Cancel anytime — no lock-in</li>
+    </ul>
+    <a class="pc-btn dark" onclick="showPage('contact')" style="text-decoration:none">Get started →</a>
+  </div>
+  <div class="pc feat">
+    <div class="pc-badge">Best Value</div>
+    <div class="pc-plan">Professional</div>
+    <div class="pc-price"><sup>$</sup>899</div>
+    <div class="pc-period">build fee, then $149 / month</div>
+    <div class="pc-div"></div>
+    <div class="pc-inc">Everything in Essential, plus</div>
+    <ul class="pc-list">
+      <li>Up to 5+ pages — scalable as you grow</li>
+      <li>Extended 10-day build for greater detail</li>
+      <li>3 rounds of revisions included</li>
+      <li>Advanced SEO &amp; analytics setup</li>
+      <li>Custom feature integrations (booking, menus, forms)</li>
+      <li>Priority build queue — faster turnaround</li>
+      <li>Dedicated onboarding &amp; strategy call</li>
+      <li>Content updates on request — priority 24hr replies</li>
+    </ul>
+    <a class="pc-btn lite" onclick="showPage('contact')" style="text-decoration:none">Get started →</a>
+  </div>
+</div>
+<div class="price-g">
+  <div class="pg-box">
+    <div style="font-size:24px;flex-shrink:0">🛡️</div>
+    <div><div class="pg-title">Free demo before you pay anything</div><div class="pg-desc">We build your personalised demo site at no cost. If you love it, we go ahead. If not, no charge and no hard feelings.</div></div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq-sec">
+  <div class="faq-in">
+    <div class="stag" style="color:rgba(255,255,255,.3)">FAQ</div>
+    <div class="faq-ttl">Questions about<br>development.</div>
+    <div class="faq-sub">Straight answers about how we build, what's included, and how it all works.</div>
+    <div class="faq-item" onclick="tFaq(this)"><div class="faq-q">What technology do you use to build sites? <span class="faq-ico">+</span></div><div class="faq-a">We build with clean HTML, CSS, and JavaScript — no page builders, no WordPress bloat. Your site is lean, fast, and easy to host anywhere. For e-commerce we use Shopify. For content-heavy sites we can integrate a lightweight CMS so you can update content yourself.</div></div>
+    <div class="faq-item" onclick="tFaq(this)"><div class="faq-q">Can I update the site myself after launch? <span class="faq-ico">+</span></div><div class="faq-a">Yes — on the Care plan, just email us with any changes and we'll handle it within 24 hours. If you'd like to edit yourself, we can set up a CMS so you can update text, images, and menu items without touching any code.</div></div>
+    <div class="faq-item" onclick="tFaq(this)"><div class="faq-q">How fast will my website load? <span class="faq-ico">+</span></div><div class="faq-a">We target a Google PageSpeed score of 90+ on all sites — achieved through clean code, optimised images, minimal dependencies, and fast Vercel hosting. A fast site is critical for both user experience and SEO ranking.</div></div>
+    <div class="faq-item" onclick="tFaq(this)"><div class="faq-q">Will my site show up on Google? <span class="faq-ico">+</span></div><div class="faq-a">Every site includes technical SEO foundations — proper meta tags, structured data, sitemap, Google Search Console setup, and Google Business profile configuration. This gets you indexed correctly from day one.</div></div>
+    <div class="faq-item" onclick="tFaq(this)"><div class="faq-q">What if I want to add more pages or features later? <span class="faq-ico">+</span></div><div class="faq-a">No problem. Additional pages can be added at any time — typically $150–$250 per page depending on complexity. Features like booking integrations, contact forms, menu systems, or e-commerce can be quoted and added at any stage.</div></div>
+    <div class="faq-item" onclick="tFaq(this)"><div class="faq-q">Who owns the website once it's built? <span class="faq-ico">+</span></div><div class="faq-a">You do. Once paid for, you own the code, the design, and all the content. If you cancel the Care plan, we'll help you migrate to your own hosting. No lock-in, no ransom.</div></div>
+    <div class="faq-item" onclick="tFaq(this)"><div class="faq-q">What do I need to provide to get started? <span class="faq-ico">+</span></div><div class="faq-a">Not much — your logo (if you have one), some photos, and an idea of your brand colours and tone. If you don't have photos, we can advise on free resources. We handle everything else: layout, code, hosting, and launch.</div></div>
+    <div class="faq-item" onclick="tFaq(this)"><div class="faq-q">Do you work with businesses outside Brisbane? <span class="faq-ico">+</span></div><div class="faq-a">Our focus is Brisbane-based businesses, as we know the local market well. We do occasionally work with Australian businesses outside Brisbane — get in touch and we can have a conversation.</div></div>
+  </div>
+</div>
+<div class="btm-cta">
+  <h2>Start with a<br>free demo.</h2>
+  <p>No commitment. Personalised demo ready within 48 hours.</p>
+  <a class="btn-wh" onclick="showPage('contact')">Get your free demo →</a>
+</div>
+</div><!-- /pricing -->
+
+
+<!-- ══════════════ CONTACT ══════════════ -->
+<div id="page-contact" class="page">
+<div class="contact-wrap">
+  <div>
+    <div class="stag">Contact</div>
+    <h1 class="c-h1">Let's build<br>something great.</h1>
+    <p class="c-p">Fill in the form and we'll get back to you within 24 hours — and get started on your free demo straight away.</p>
+    <div class="c-details">
+      <a href="mailto:rupert@webwbrisbane.com" class="c-link"><div class="c-icon" style="font-size:14px;font-weight:800;color:var(--g4)">@</div><div><div class="c-label">Email</div><div class="c-val">rupert@webwbrisbane.com</div></div></a>
+      <a href="https://instagram.com/webwbrisbane" target="_blank" class="c-link"><div class="c-icon" style="font-size:14px;font-weight:800;color:var(--g4)">IG</div><div><div class="c-label">Instagram</div><div class="c-val">@webwbrisbane</div></div></a>
+      <div class="c-link" style="cursor:default"><div class="c-icon" style="font-size:14px;font-weight:800;color:var(--g4)">QLD</div><div><div class="c-label">Location</div><div class="c-val">New Farm, Brisbane</div></div></div>
+    </div>
+  </div>
+  <div class="c-form-box">
+    <h3>Get a free demo site →</h3>
+    <form class="c-form" onsubmit="handleSubmit(event)">
+      <div class="cf-row">
+        <div class="cf-field"><label>Your name</label><input type="text" placeholder="Jane Smith" required></div>
+        <div class="cf-field"><label>Business name</label><input type="text" placeholder="Smith's Café" required></div>
+      </div>
+      <div class="cf-field"><label>Email address</label><input type="email" placeholder="jane@yourbusiness.com.au" required></div>
+      <div class="cf-field"><label>Type of business</label><select><option value="">Select your industry</option><option>Café or restaurant</option><option>Retail</option><option>Trades &amp; services</option><option>Health &amp; wellness</option><option>Professional services</option><option>Other</option></select></div>
+      <div class="cf-field"><label>Do you have a website?</label><select><option value="">Select an option</option><option>No — I don't have one</option><option>Yes — but it needs a refresh</option><option>Not sure</option></select></div>
+      <div class="cf-field"><label>Anything else?</label><textarea placeholder="Tell us about your business, your Instagram, or anything useful..."></textarea></div>
+      <div class="cf-sub">
+        <button type="submit" class="btn-bk">Send message →</button>
+        <span class="cf-note">We reply within 24 hours.</span>
+      </div>
+      <div class="cf-success" id="cfSuccess">✓ Message sent! We'll be in touch within 24 hours.</div>
+    </form>
+  </div>
+</div>
+</div><!-- /contact -->
+
+<!-- FOOTER -->
+<footer>
+  <span class="f-logo" onclick="showPage('home')">WebW</span>
+  <span class="f-copy">© 2026 WebW Brisbane · ABN 67 529 011 547</span>
+  <nav class="f-nav">
+    <a onclick="showPage('home')">Home</a>
+    <a onclick="showPage('pricing')">Pricing</a>
+    <a onclick="showPage('contact')">Contact</a>
+  </nav>
+</footer>
+
+<script>
+/* ── ROUTING ── */
+function showPage(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+n).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ── NAV SHADOW ── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('mainnav').classList.toggle('scrolled',scrollY>10);
+});
+
+/* ── SCROLL REVEAL ── */
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('shown');ro.unobserve(e.target)}});
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ── FAQ ── */
+function tFaq(el){
+  const open=el.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!open)el.classList.add('open');
+}
+
+/* ── FORMS ── */
+function handleSubmit(e){
+  e.preventDefault();
+  const m=document.getElementById('cfSuccess');
+  m.style.display='block';e.target.reset();
+  setTimeout(()=>m.style.display='none',7000);
+}
+function bookCall(btn){
+  const s=document.getElementById('bookSuccess');
+  s.style.display='block';
+  btn.textContent='Booked ✓';btn.style.opacity='.5';btn.disabled=true;
+}
+
+/* ── DRAG SCROLL ── */
+const sc=document.getElementById('tmplScroll');
+let down=false,sx,sl;
+sc.addEventListener('mousedown',e=>{down=true;sx=e.pageX-sc.offsetLeft;sl=sc.scrollLeft;sc.style.cursor='grabbing'});
+sc.addEventListener('mouseleave',()=>{down=false;sc.style.cursor='grab'});
+sc.addEventListener('mouseup',()=>{down=false;sc.style.cursor='grab'});
+sc.addEventListener('mousemove',e=>{if(!down)return;e.preventDefault();sc.scrollLeft=sl-(e.pageX-sc.offsetLeft-sx)*1.5});
+
+/* ── CARD TILT ── */
+document.querySelectorAll('.wc,.svc-card,.proc-node').forEach(c=>{
+  c.addEventListener('mousemove',e=>{
+    const r=c.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    c.style.transform=`translateY(-4px) rotateX(${-y*5}deg) rotateY(${x*5}deg)`;
+    c.style.transition='none';
+  });
+  c.addEventListener('mouseleave',()=>{c.style.transform='';c.style.transition=''});
+});
+
+/* ── SET MIN DATE for booking ── */
+const di=document.getElementById('bookDate');
+if(di){const t=new Date();di.min=t.toISOString().split('T')[0]}
+
+/* ── HOVER INTERACTIONS ── */
+document.querySelectorAll('a,button,.dd-item,.slot,.wc,.svc-card,.proc-node,.tmpl-card,.sl-row,.faq-q').forEach(el=>{
+  el.addEventListener('mouseenter',()=>el.style.transition=el.style.transition||'all .2s ease');
+});
+</script>
+
+</body>
+</html>
