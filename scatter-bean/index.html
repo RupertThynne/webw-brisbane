@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Scatter Bean — An independent café in Taringa</title>
+  <meta name="description" content="All-day breakfast, coffee, and juice — served by people who'll remember your name. An independent café in Taringa." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Scatter Bean — An independent café in Taringa" />
+  <meta property="og:description" content="All-day breakfast, coffee, and juice — served by people who'll remember your name." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_AU" />
+
+  <!-- Favicon (inline SVG — sage green bean) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%236B8E6F'/%3E%3Cpath d='M22 22c8-6 18-2 20 8s-6 18-16 14c-8-3-12-16-4-22z' fill='%23F8F4ED'/%3E%3C/svg%3E" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Lenis smooth scroll -->
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg:       '#F8F4ED',
+            surface:  '#FFFFFF',
+            ink:      '#2A1F18',
+            muted:    '#756B5F',
+            accent:   '#6B8E6F',
+            'accent-deep': '#587456',
+            divider:  '#E8DFD2',
+          },
+          fontFamily: {
+            sans:  ['Inter','ui-sans-serif','system-ui','sans-serif'],
+            serif: ['"Instrument Serif"','ui-serif','Georgia','serif'],
+          },
+          maxWidth: {
+            site: '1200px',
+            hero: '1280px',
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: auto; } /* Lenis handles it */
+    body {
+      background: #F8F4ED;
+      color: #2A1F18;
+      font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      font-feature-settings: 'ss01' on, 'cv11' on;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .serif { font-family: 'Instrument Serif', ui-serif, Georgia, serif; }
+
+    /* Display headline */
+    .h-display {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      line-height: 0.95;
+      letter-spacing: -0.025em;
+      font-weight: 400;
+    }
+    .h-section {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.015em;
+      font-weight: 400;
+    }
+
+    /* Per-word reveal: each word starts hidden */
+    .reveal-word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(20px);
+      will-change: opacity, transform;
+    }
+
+    /* Section-entry reveal (set by GSAP ScrollTrigger) */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      will-change: opacity, transform;
+    }
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(20px);
+      will-change: opacity, transform;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: #6B8E6F;
+      color: #fff;
+      transition: background 200ms cubic-bezier(.22,1,.36,1),
+                  transform 200ms cubic-bezier(.22,1,.36,1),
+                  box-shadow 200ms cubic-bezier(.22,1,.36,1);
+    }
+    .btn-primary:hover {
+      background: #587456;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(107,142,111,0.32);
+    }
+    .btn-secondary {
+      border: 1px solid #2A1F18;
+      color: #2A1F18;
+      transition: background 200ms cubic-bezier(.22,1,.36,1),
+                  color 200ms cubic-bezier(.22,1,.36,1),
+                  transform 200ms cubic-bezier(.22,1,.36,1);
+    }
+    .btn-secondary:hover {
+      background: #2A1F18;
+      color: #F8F4ED;
+      transform: translateY(-2px);
+    }
+
+    /* Card hover */
+    .card {
+      background: #FFFFFF;
+      border: 1px solid #E8DFD2;
+      transition: transform 250ms cubic-bezier(.22,1,.36,1),
+                  box-shadow 250ms cubic-bezier(.22,1,.36,1),
+                  border-color 250ms cubic-bezier(.22,1,.36,1);
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(42,31,24,0.08);
+      border-color: #6B8E6F;
+    }
+
+    /* Image hover */
+    .img-frame {
+      overflow: hidden;
+      border-radius: 0.75rem;
+      background: #E8DFD2;
+    }
+    .img-frame img {
+      transition: transform 600ms cubic-bezier(.22,1,.36,1);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .img-frame:hover img { transform: scale(1.04); }
+
+    /* Animated underline link */
+    .link-underline {
+      position: relative;
+      padding-bottom: 2px;
+    }
+    .link-underline::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 1px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 250ms cubic-bezier(.22,1,.36,1);
+    }
+    .link-underline:hover::after { transform: scaleX(1); }
+
+    /* Nav glass on scroll */
+    .nav {
+      transition: background 300ms cubic-bezier(.22,1,.36,1),
+                  border-color 300ms cubic-bezier(.22,1,.36,1),
+                  backdrop-filter 300ms;
+    }
+    .nav.scrolled {
+      background: rgba(248, 244, 237, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid #E8DFD2;
+    }
+
+    /* Subtle noise on hero */
+    .noise {
+      position: absolute; inset: 0; pointer-events: none; opacity: 0.05;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+    }
+
+    /* Parallax frame */
+    .parallax-frame {
+      overflow: hidden;
+      position: relative;
+      height: clamp(360px, 65vh, 640px);
+      border-radius: 0.75rem;
+    }
+    .parallax-frame img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 120%;
+      object-fit: cover;
+      will-change: transform;
+    }
+
+    /* Honour reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-word, .reveal, .reveal-stagger > * {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .card:hover, .btn-primary:hover, .btn-secondary:hover, .img-frame:hover img {
+        transform: none !important;
+      }
+    }
+
+    /* Section padding */
+    .section-pad { padding-top: 96px; padding-bottom: 96px; }
+    @media (min-width: 768px) { .section-pad { padding-top: 128px; padding-bottom: 128px; } }
+  </style>
+</head>
+
+<body class="bg-bg text-ink">
+
+  <!-- ─────────── NAV ─────────── -->
+  <header id="nav" class="nav fixed inset-x-0 top-0 z-40">
+    <div class="max-w-site mx-auto px-6 md:px-10 h-[68px] flex items-center justify-between">
+      <a href="#top" class="flex items-center gap-2">
+        <span class="serif text-2xl tracking-tight">Scatter Bean</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-8 text-[15px]">
+        <a href="#menu"  class="link-underline">Menu</a>
+        <a href="#story" class="link-underline">Story</a>
+        <a href="#visit" class="link-underline">Visit</a>
+        <a href="https://instagram.com/scatter_bean_cafe" target="_blank" rel="noopener" class="link-underline">Instagram</a>
+      </nav>
+      <a href="#visit" class="md:hidden inline-flex items-center gap-1.5 text-sm font-medium">
+        <i data-lucide="map-pin" class="w-4 h-4"></i> Visit
+      </a>
+    </div>
+  </header>
+
+  <!-- ─────────── HERO ─────────── -->
+  <section id="top" class="relative section-pad pt-[148px] md:pt-[180px] overflow-hidden">
+    <div class="noise"></div>
+    <div class="max-w-hero mx-auto px-6 md:px-10 relative">
+      <p class="reveal text-sm font-medium uppercase tracking-[0.2em] text-muted mb-6 md:mb-8">
+        Taringa · independent café
+      </p>
+      <h1 class="h-display max-w-[15ch]" id="hero-headline">
+        <span class="reveal-word">A</span>
+        <span class="reveal-word">café</span>
+        <span class="reveal-word">Taringa</span>
+        <span class="reveal-word italic" style="font-family:'Instrument Serif',serif;">calls</span>
+        <span class="reveal-word italic" style="font-family:'Instrument Serif',serif;">its</span>
+        <span class="reveal-word italic" style="font-family:'Instrument Serif',serif;">own.</span>
+      </h1>
+      <p class="reveal mt-8 md:mt-10 max-w-xl text-lg md:text-xl text-muted leading-relaxed">
+        All-day breakfast, coffee, and juice — served by people who'll
+        remember your name.
+      </p>
+      <div class="reveal mt-10 flex flex-wrap items-center gap-4">
+        <a href="#visit" class="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-md text-[15px] font-medium">
+          Find us <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+        <a href="https://instagram.com/scatter_bean_cafe" target="_blank" rel="noopener"
+           class="btn-secondary inline-flex items-center gap-2 px-6 py-3 rounded-md text-[15px] font-medium">
+          <i data-lucide="instagram" class="w-4 h-4"></i> @scatter_bean_cafe
+        </a>
+      </div>
+    </div>
+
+    <!-- Hero photo card -->
+    <div class="max-w-hero mx-auto px-6 md:px-10 mt-16 md:mt-24 relative">
+      <div class="img-frame reveal" style="aspect-ratio: 16/9; max-height: 580px;">
+        <img src="images/hero.jpg"
+             alt="The interior of Scatter Bean cafe in Taringa"
+             loading="eager" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── WHAT WE DO ─────────── -->
+  <section id="story" class="section-pad">
+    <div class="max-w-site mx-auto px-6 md:px-10">
+      <div class="grid md:grid-cols-12 gap-10 md:gap-16 items-end mb-14">
+        <div class="md:col-span-7">
+          <p class="reveal text-sm font-medium uppercase tracking-[0.2em] text-muted mb-4">What we do</p>
+          <h2 class="reveal h-section max-w-[18ch]">
+            Coffee, brunch, and a welcome you stay for.
+          </h2>
+        </div>
+        <p class="reveal md:col-span-5 text-muted text-lg leading-relaxed">
+          Three things we've cared about since the day we opened — and the reason
+          locals walk past the chain on the corner to come in here instead.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6 reveal-stagger">
+        <div class="card p-7 md:p-8 rounded-xl">
+          <div class="w-11 h-11 rounded-lg flex items-center justify-center mb-5"
+               style="background:#EFF1EB;color:#587456">
+            <i data-lucide="coffee" class="w-5 h-5"></i>
+          </div>
+          <h3 class="serif text-2xl mb-3">Coffee, slow</h3>
+          <p class="text-muted leading-relaxed">
+            Mambo coffee, brewed slow. Tielka tea by the pot. Vietnamese iced for the
+            warm days.
+          </p>
+        </div>
+        <div class="card p-7 md:p-8 rounded-xl">
+          <div class="w-11 h-11 rounded-lg flex items-center justify-center mb-5"
+               style="background:#EFF1EB;color:#587456">
+            <i data-lucide="utensils" class="w-5 h-5"></i>
+          </div>
+          <h3 class="serif text-2xl mb-3">Brunch, honest</h3>
+          <p class="text-muted leading-relaxed">
+            Bacon rolls, eggs benedict, green eggs and ham, croissants out of the oven.
+            Pesto we make ourselves.
+          </p>
+        </div>
+        <div class="card p-7 md:p-8 rounded-xl">
+          <div class="w-11 h-11 rounded-lg flex items-center justify-center mb-5"
+               style="background:#EFF1EB;color:#587456">
+            <i data-lucide="disc-3" class="w-5 h-5"></i>
+          </div>
+          <h3 class="serif text-2xl mb-3">A room you settle into</h3>
+          <p class="text-muted leading-relaxed">
+            Antique tables, colourful cushions, a vintage stereogram you can spin
+            yourself. The kind of room you don't want to leave in a hurry.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── MENU ─────────── -->
+  <section id="menu" class="section-pad" style="background: #F1ECE2;">
+    <div class="max-w-site mx-auto px-6 md:px-10">
+      <div class="flex items-end justify-between flex-wrap gap-6 mb-12">
+        <div>
+          <p class="reveal text-sm font-medium uppercase tracking-[0.2em] text-muted mb-4">Menu</p>
+          <h2 class="reveal h-section max-w-[18ch]">Brunch, all day.</h2>
+        </div>
+        <p class="reveal text-muted text-base max-w-sm">
+          The same menu printed on every table — bowls, bagels, burgers, pastry, and
+          a full coffee program.
+        </p>
+      </div>
+
+      <!-- Menu image — let the photo set its own aspect ratio so nothing gets cropped -->
+      <figure class="reveal mx-auto" style="max-width: 760px;">
+        <div class="rounded-xl overflow-hidden bg-divider"
+             style="box-shadow: 0 24px 60px rgba(42,31,24,0.14);">
+          <img src="images/menu.jpg"
+               alt="Scatter Bean's brunch menu — all-day breakfast, burgers, toasties, sandwiches, cakes and slices"
+               loading="lazy"
+               style="display:block; width:100%; height:auto;" />
+        </div>
+        <figcaption class="text-center text-sm text-muted mt-6 italic">
+          7A Princess Street, Taringa
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ─────────── THE SPACE (parallax) ─────────── -->
+  <section class="section-pad">
+    <div class="max-w-site mx-auto px-6 md:px-10">
+      <div class="grid md:grid-cols-12 gap-10 md:gap-16 items-end mb-12">
+        <div class="md:col-span-7">
+          <p class="reveal text-sm font-medium uppercase tracking-[0.2em] text-muted mb-4">The space</p>
+          <h2 class="reveal h-section max-w-[18ch]">
+            A room you stay in longer than you meant to.
+          </h2>
+        </div>
+        <p class="reveal md:col-span-5 text-muted text-lg leading-relaxed">
+          Antique tables, vintage stereogram, board games on the back shelf. Pull up a
+          chair, pick a record, settle in for an afternoon with the regulars.
+        </p>
+      </div>
+
+      <div class="parallax-frame reveal" id="parallax">
+        <img src="images/space.jpg"
+             alt="The cosy interior of Scatter Bean cafe with vintage furniture" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── VISIT ─────────── -->
+  <section id="visit" class="section-pad">
+    <div class="max-w-site mx-auto px-6 md:px-10">
+      <p class="reveal text-sm font-medium uppercase tracking-[0.2em] text-muted mb-4">Visit</p>
+      <h2 class="reveal h-section max-w-[16ch] mb-12">7A Princess Street, Taringa.</h2>
+
+      <div class="grid md:grid-cols-2 gap-10 md:gap-16">
+
+        <div class="reveal-stagger space-y-8">
+          <div>
+            <p class="text-sm font-medium uppercase tracking-[0.18em] text-muted mb-2">Address</p>
+            <a href="https://maps.google.com/?q=7A+Princess+Street+Taringa+QLD+4068"
+               target="_blank" rel="noopener"
+               class="text-xl serif link-underline">
+              7A Princess Street, Taringa QLD 4068
+            </a>
+            <p class="text-muted mt-1 text-sm">An independent café in the heart of Taringa.</p>
+          </div>
+
+          <div>
+            <p class="text-sm font-medium uppercase tracking-[0.18em] text-muted mb-2">Hours</p>
+            <ul class="text-base space-y-1.5">
+              <li class="flex justify-between max-w-xs"><span>Mon–Fri</span><span class="text-muted">6:30 am – 1:30 pm</span></li>
+              <li class="flex justify-between max-w-xs"><span>Saturday</span><span class="text-muted">7:00 am – 1:30 pm</span></li>
+              <li class="flex justify-between max-w-xs"><span>Sunday</span><span class="text-muted">7:30 am – 1:30 pm</span></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="text-sm font-medium uppercase tracking-[0.18em] text-muted mb-2">Get in touch</p>
+            <a href="tel:0479107198" class="block text-lg link-underline">0479 107 198</a>
+            <a href="https://instagram.com/scatter_bean_cafe" target="_blank" rel="noopener"
+               class="block text-lg mt-1 link-underline">@scatter_bean_cafe</a>
+          </div>
+        </div>
+
+        <div class="img-frame reveal" style="aspect-ratio:4/3">
+          <iframe
+            src="https://www.google.com/maps?q=7A+Princess+Street+Taringa+QLD+4068&output=embed"
+            width="100%" height="100%" style="border:0; display:block; min-height:380px;"
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            title="Map showing 7A Princess Street, Taringa">
+          </iframe>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────── FOOTER ─────────── -->
+  <footer class="border-t border-divider">
+    <div class="max-w-site mx-auto px-6 md:px-10 py-10 flex flex-col md:flex-row gap-4 md:items-center md:justify-between text-sm text-muted">
+      <div>
+        <span class="serif text-ink text-lg">Scatter Bean</span>
+        <span class="ml-3">7A Princess St, Taringa QLD</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+        <a href="https://instagram.com/scatter_bean_cafe" target="_blank" rel="noopener" class="link-underline">Instagram</a>
+        <a href="tel:0479107198" class="link-underline">0479 107 198</a>
+        <span>© 2026 Scatter Bean</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─────────── SCRIPTS ─────────── -->
+  <script>
+    // Render Lucide icons
+    if (window.lucide) lucide.createIcons();
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Smooth scroll via Lenis
+    let lenis;
+    if (!reduceMotion && window.Lenis) {
+      lenis = new Lenis({
+        duration: 1.15,
+        easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+      });
+      function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+      requestAnimationFrame(raf);
+    }
+
+    // GSAP setup
+    if (window.gsap && window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Sync Lenis with ScrollTrigger
+      if (lenis) lenis.on('scroll', ScrollTrigger.update);
+
+      if (!reduceMotion) {
+        // Hero per-word reveal
+        gsap.to('#hero-headline .reveal-word', {
+          opacity: 1, y: 0, duration: 0.65,
+          ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          stagger: 0.06, delay: 0.2,
+        });
+
+        // Generic reveal — single elements
+        gsap.utils.toArray('.reveal').forEach(el => {
+          gsap.to(el, {
+            opacity: 1, y: 0, duration: 0.7,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 85%' }
+          });
+        });
+
+        // Stagger reveal — children of .reveal-stagger
+        gsap.utils.toArray('.reveal-stagger').forEach(group => {
+          const children = Array.from(group.children);
+          gsap.to(children, {
+            opacity: 1, y: 0, duration: 0.7,
+            ease: 'power3.out',
+            stagger: 0.1,
+            scrollTrigger: { trigger: group, start: 'top 85%' }
+          });
+        });
+
+        // Parallax: image moves at 50% scroll speed
+        const pImg = document.querySelector('#parallax img');
+        if (pImg) {
+          gsap.to(pImg, {
+            yPercent: -15,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '#parallax',
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            }
+          });
+        }
+      }
+    }
+
+    // Nav background on scroll
+    const nav = document.getElementById('nav');
+    function onScroll() {
+      if (window.scrollY > 24) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  </script>
+</body>
+</html>
